@@ -7,8 +7,6 @@ on:
       - develop
 
   pull_request:
-    branches:
-      - main
 
 jobs:
 
@@ -16,31 +14,33 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        python-version:
+          - "3.11"
+          - "3.12"
+
     steps:
 
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-
-      - name: Verify Python Version.
-        run: python --version
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
 
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install -r requirements-dev.txt
 
-      - name: Verify Flask Installation
+      - name: Run Tests
         run: |
-          python -c "import flask; print(flask.__version__)"
+          pytest --cov=. --cov-report=xml
 
-      - name: Validate Application Syntax
-        run: |
-          python -m py_compile app.py
-
-      - name: Workflow Completed
-        run: echo "Python build completed successfully!"
+      - name: Upload Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.python-version }}
+          path: coverage.xml
