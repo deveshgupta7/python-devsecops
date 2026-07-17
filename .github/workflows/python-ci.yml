@@ -44,6 +44,10 @@ jobs:
       - name: Run Ruff
         run: ruff check .
 
+      - name: Run Bandit
+        run: |
+          bandit -r . -ll
+        
       - name: Run Tests
         run: pytest --cov=. --cov-report=xml
 
