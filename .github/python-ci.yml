@@ -26,7 +26,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Verify Python Version
+      - name: Verify Python Version.
         run: python --version
 
       - name: Install Dependencies
