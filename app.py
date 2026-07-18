@@ -18,3 +18,7 @@ def health():
 @app.get("/version")
 def version():
     return jsonify({"version": VERSION})
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)

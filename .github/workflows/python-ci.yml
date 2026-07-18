@@ -62,6 +62,10 @@ jobs:
         run: |
           pytest --cov=. --cov-report=xml
 
+      - name: Build Docker Image
+        run: |
+          docker build -t python-demo:${{ github.sha }} .
+          
       - name: Upload Coverage
         uses: actions/upload-artifact@v4
         with:
