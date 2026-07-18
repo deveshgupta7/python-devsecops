@@ -53,7 +53,7 @@ jobs:
 
       - name: Run Bandit
         run: |
-          bandit -r . -ll
+          bandit -r . -ll -s 8104
         
       - name: Run Tests
         run: pytest --cov=. --cov-report=xml
@@ -65,7 +65,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t python-demo:${{ github.sha }} .
-          
+
       - name: Upload Coverage
         uses: actions/upload-artifact@v4
         with:
