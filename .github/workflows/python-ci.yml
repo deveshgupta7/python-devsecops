@@ -66,6 +66,23 @@ jobs:
         run: |
           docker build -t python-demo:${{ github.sha }} .
 
+      - name: Dockerfile Lint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+
+      - name: Scan Docker Image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: python-demo:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          exit-code: 1
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: python-demo:${{ github.sha }}
+
       - name: Upload Coverage
         uses: actions/upload-artifact@v4
         with:
